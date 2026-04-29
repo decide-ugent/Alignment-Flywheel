@@ -18,7 +18,7 @@ The governance loop follows an **OODA** (Observe → Orient → Decide → Act) 
 4. **Refinement** plans a batch of minimal, regression-tested corrections and deploys them.
 5. **Blue Team** monitors for collateral damage after each batch.
 
-The loop repeats until no violations remain, producing a monotonically improving safety trajectory with full auditability. The architecture is domain-agnostic: this repository demonstrates it on both **continuous spatial reward surfaces** (Inverse IRL) and **discrete medical decision-making** scenarios using the exact same engine, protocols, and HTTP API — only the pluggable OODA strategy modules differ.
+The loop repeats until no violations remain, producing a monotonically improving safety trajectory with full auditability. The architecture is domain-agnostic: this repository demonstrates it on both **continuous spatial reward surfaces** (Inverse IRL) and **discrete medical decision-making** scenarios using the exact same engine, protocols, and HTTP API, only the pluggable OODA strategy modules differ.
 
 ## Citation
 
