@@ -7,7 +7,7 @@
 The **Alignment Flywheel** is a governance-centric hybrid multi-agent system (MAS) for architecture-agnostic AI safety. Rather than baking safety constraints into a model's training objective or prompt, the Flywheel wraps *any* AI system (the "Oracle") in a closed governance loop that continuously discovers safety violations, verifies them against formal norms, and deploys targeted correction,  all without retraining or human interaction.
 
 <p align="center">
-  <img src="spatial_3d_progression.png" alt="Spatial 3D demo progression" width="100%"/>
+  <img src="./spatial_flywheel_progression.png" alt="Spatial 3D demo progression" width="100%"/>
 </p>
 
 The governance loop follows an **OODA** (Observe → Orient → Decide → Act) decomposition:
@@ -18,7 +18,7 @@ The governance loop follows an **OODA** (Observe → Orient → Decide → Act) 
 4. **Refinement** plans a batch of minimal, regression-tested corrections and deploys them.
 5. **Blue Team** monitors for collateral damage after each batch.
 
-The loop repeats until no violations remain, producing a monotonically improving safety trajectory with full auditability. The architecture is domain-agnostic: this repository demonstrates it on both **continuous spatial reward surfaces** (Inverse IRL) and **discrete medical decision-making** scenarios using the exact same engine, protocols, and HTTP API, only the pluggable OODA strategy modules differ.
+The loop repeats until no violations remain, producing a monotonically improving safety trajectory with full auditability. The architecture is domain-agnostic: this repository demonstrates it on both **continuous spatial reward surfaces** (Interactionless Inverse Reinforcement Learning) and **discrete medical decision-making** scenarios using the exact same engine, protocols, and HTTP API, only the pluggable OODA strategy modules differ.
 
 ## Citation
 
