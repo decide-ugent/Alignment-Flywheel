@@ -1,0 +1,50 @@
+# Simple Medical Demo — Minimal viable governance pipeline
+# Trivial 60-line oracle, 2 norms, FIFO triage, 15 cases.
+# Demonstrates gradual convergence: ESCALATE → BLOCK one keyword
+# group per iteration as the oracle learns hard-block patches.
+
+demo:
+  name: "Simple Medical (minimal)"
+  num_iterations: 8
+  mode: medical
+
+oracle:
+  class: SimpleMedicalOracle
+
+proposer:
+  class: PassthroughProposer
+
+flywheel_overlay:
+  class: SimpleMedicalOverlay
+
+enforcement:
+  class: DefaultEnforcement
+  params:
+    safety_margin: 0.4
+    audit_safety_margin: 0.85
+
+redteam:
+  observe: MedicalCaseGenerator
+  orient: MedicalCaseOrienter
+  decide: MedicalPriorityDecider
+  act: MedicalCandidateSubmitter
+  params:
+    samples_per_iteration: 20
+
+verifier:
+  observe: NormLoader
+  orient: MedicalNormMatcher
+  decide: MedicalViolationDecider
+  act: VerificationEmitter
+
+refinement:
+  observe: MedicalQueueObserver
+  orient: MedicalCorrectionOrienter
+  decide: MedicalBatchDecider
+  act: MedicalBatchDeployer
+  params:
+    max_patches: 1
+    category_filter: ["undertriaged_med", "lab_no_context"]
+
+triage:
+  class: FIFOTriage

@@ -1,0 +1,50 @@
+# Complex Medical Demo
+# 5-dimensional oracle (medication risk × interaction × action ×
+# patient × evidence), drug interactions, vulnerable patients,
+# 4 norms across 3 NormKinds, priority triage, 18 fixed cases.
+
+demo:
+  name: "Complex Medical (rich oracle, multi-specialty)"
+  num_iterations: 8
+  mode: medical
+
+oracle:
+  class: ComplexMedicalOracle
+
+proposer:
+  class: PassthroughProposer
+
+flywheel_overlay:
+  class: ComplexMedicalOverlay
+
+enforcement:
+  class: DefaultEnforcement
+  params:
+    safety_margin: 0.4
+    audit_safety_margin: 0.85
+
+redteam:
+  observe: MedicalCaseGenerator
+  orient: MedicalCaseOrienter
+  decide: MedicalPriorityDecider
+  act: MedicalCandidateSubmitter
+  params:
+    samples_per_iteration: 20
+
+verifier:
+  observe: NormLoader
+  orient: MedicalNormMatcher
+  decide: MedicalViolationDecider
+  act: VerificationEmitter
+
+refinement:
+  observe: MedicalQueueObserver
+  orient: MedicalCorrectionOrienter
+  decide: MedicalBatchDecider
+  act: MedicalBatchDeployer
+  params:
+    max_patches: 1
+    category_filter: ["undertriaged_med", "lab_no_context"]
+
+triage:
+  class: PriorityTriage

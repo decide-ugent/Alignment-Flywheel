@@ -1,0 +1,50 @@
+# Patient Portal Demo
+# Generative Red Team, structured-output verification, disposition
+# overrides + hard-blocks. Fixed eval set tracks safety-score over
+# governance iterations.
+
+demo:
+  name: "Patient Portal Governance"
+  num_iterations: 6
+  mode: medical
+
+oracle:
+  class: PatientPortalOracle
+
+proposer:
+  class: PassthroughProposer
+
+flywheel_overlay:
+  class: PatientPortalOverlay
+
+enforcement:
+  class: DefaultEnforcement
+  params:
+    safety_margin: 0.4
+    audit_safety_margin: 0.85
+
+redteam:
+  observe: MedicalCaseGenerator
+  orient: MedicalCaseOrienter
+  decide: MedicalPriorityDecider
+  act: MedicalCandidateSubmitter
+  params:
+    samples_per_iteration: 20
+
+verifier:
+  observe: NormLoader
+  orient: MedicalNormMatcher
+  decide: MedicalViolationDecider
+  act: VerificationEmitter
+
+refinement:
+  observe: MedicalQueueObserver
+  orient: MedicalCorrectionOrienter
+  decide: MedicalBatchDecider
+  act: MedicalBatchDeployer
+  params:
+    max_patches: 1
+    category_filter: ["undertriaged_med", "lab_no_context"]
+
+triage:
+  class: PriorityTriage

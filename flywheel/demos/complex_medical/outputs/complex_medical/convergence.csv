@@ -1,0 +1,4 @@
+iteration,allow,block,escalate,escalation_rate,rt_candidates,verified,oracle_version
+1,6,0,12,0.667,20,8,oracle:v0
+2,6,6,6,0.333,20,11,oracle:v1
+3,9,9,0,0.0,20,14,oracle:v2

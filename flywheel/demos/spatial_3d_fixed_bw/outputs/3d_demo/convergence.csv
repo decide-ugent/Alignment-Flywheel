@@ -1,0 +1,14 @@
+iteration,found,kernels,predicted_coverage,rejected,basin,flaws,oracle_version
+1,500,88,500,0,783,411,oracle:v1
+2,1006,40,1005,1,783,359,oracle:v2
+3,875,57,874,1,783,295,oracle:v3
+4,1062,55,1054,8,783,227,oracle:v4
+5,1103,66,1100,3,783,169,oracle:v5
+6,915,78,914,1,783,108,oracle:v6
+7,761,89,756,7,783,58,oracle:v7
+8,578,75,576,3,782,33,oracle:v8
+9,435,71,430,5,782,18,oracle:v9
+10,336,56,330,6,782,7,oracle:v10
+11,224,44,222,3,782,3,oracle:v11
+12,165,28,163,4,782,1,oracle:v12
+13,98,21,94,5,782,0,oracle:v13

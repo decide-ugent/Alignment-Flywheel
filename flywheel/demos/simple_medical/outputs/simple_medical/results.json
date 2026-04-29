@@ -1,0 +1,40 @@
+{
+  "demo": {
+    "name": "Simple Medical (minimal)",
+    "num_iterations": 8,
+    "mode": "medical"
+  },
+  "iterations": [
+    {
+      "iteration": 1,
+      "allow": 6,
+      "block": 0,
+      "escalate": 9,
+      "escalation_rate": 0.6,
+      "rt_candidates": 20,
+      "verified": 8,
+      "oracle_version": "oracle:v0"
+    },
+    {
+      "iteration": 2,
+      "allow": 6,
+      "block": 3,
+      "escalate": 6,
+      "escalation_rate": 0.4,
+      "rt_candidates": 20,
+      "verified": 9,
+      "oracle_version": "oracle:v1"
+    },
+    {
+      "iteration": 3,
+      "allow": 9,
+      "block": 6,
+      "escalate": 0,
+      "escalation_rate": 0.0,
+      "rt_candidates": 20,
+      "verified": 13,
+      "oracle_version": "oracle:v2"
+    }
+  ],
+  "total_time": 2.08
+}

@@ -1,0 +1,66 @@
+# ════════════════════════════════════════════════════════════════
+# Spatial 3D Demo — Predictive Coverage + Cumulative Regression
+# ════════════════════════════════════════════════════════════════
+# Real IIRL data, 100% basin preservation, zero collateral.
+
+demo:
+  name: "3D Spatial IIRL — Predictive Coverage"
+  num_iterations: 18
+  boundary: 0.34
+  safety_floor: 0.005
+  grid_resolution: 20
+  bounds: [-1.0, 1.0]
+  loss_cap: 0.3
+
+# Server-side components (loaded into the Flask API)
+oracle_adapter:
+  class: PrecomputedGridOracle
+  params:
+    grid_resolution: 20
+    loss_cap: 0.3
+
+proposer:
+  class: SpatialProposer
+
+flywheel_overlay:
+  class: SpatialOverlay
+
+enforcement:
+  class: DefaultEnforcement
+  params:
+    safety_margin: 0.4
+
+# Governance-side OODA roles (built in-process, call the API via HTTP clients)
+redteam:
+  observe: FineSamplingObserver
+  orient: DistanceOrienter
+  decide: FarthestFirstDecider
+  act: CandidateSubmitter
+  params:
+    grid_resolution: 20
+    fine_samples: 500
+    fine_radius: 0.25
+    boundary: 0.34
+    safety_floor: 0.005
+
+verifier:
+  observe: NormLoader
+  orient: SpatialNormMatcher
+  decide: SpatialViolationDecider
+  act: VerificationEmitter
+
+refinement:
+  observe: QueueObserver
+  orient: AdaptiveBandwidthOrienter
+  decide: PredictiveCoverageDecider
+  act: BatchDeployer
+  params:
+    max_patches: 60
+    max_basin_loss: 0.10
+    min_bw: 0.03
+    max_bw: 0.30
+    boundary: 0.34
+    safety_floor: 0.005
+
+triage:
+  class: PriorityTriage

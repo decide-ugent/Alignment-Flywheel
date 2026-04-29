@@ -1,0 +1,60 @@
+# ════════════════════════════════════════════════════════════════
+# Spatial 3D Demo — Fixed Bandwidth Baseline (no regression test)
+# ════════════════════════════════════════════════════════════════
+# Same architecture, swap two OODA steps. Many more iterations,
+# basin still preserved because patches are always narrow.
+
+demo:
+  name: "3D Spatial — Fixed BW Baseline"
+  num_iterations: 25
+  boundary: 0.34
+  safety_floor: 0.01
+  grid_resolution: 20
+  bounds: [-1.0, 1.0]
+  loss_cap: 0.3
+
+oracle_adapter:
+  class: PrecomputedGridOracle
+  params:
+    grid_resolution: 20
+    loss_cap: 0.3
+
+proposer:
+  class: SpatialProposer
+
+flywheel_overlay:
+  class: SpatialOverlay
+
+enforcement:
+  class: DefaultEnforcement
+  params:
+    safety_margin: 0.4
+
+redteam:
+  observe: GridObserver               # << coarse grid only
+  orient: DistanceOrienter
+  decide: FarthestFirstDecider
+  act: CandidateSubmitter
+  params:
+    grid_resolution: 20
+    boundary: 0.34
+    safety_floor: 0.01
+
+verifier:
+  observe: NormLoader
+  orient: SpatialNormMatcher
+  decide: SpatialViolationDecider
+  act: VerificationEmitter
+
+refinement:
+  observe: QueueObserver
+  orient: FixedBandwidthOrienter      # << fixed bandwidth
+  decide: NoCumulativeDecider         # << no regression test
+  act: BatchDeployer
+  params:
+    max_patches: 60
+    fixed_bw: 0.05
+    boundary: 0.34
+
+triage:
+  class: FIFOTriage

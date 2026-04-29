@@ -1,0 +1,149 @@
+{
+  "iterations": [
+    {
+      "iteration": 1,
+      "found": 500,
+      "kernels": 88,
+      "predicted_coverage": "500",
+      "rejected": 0,
+      "basin": 783,
+      "flaws": 411,
+      "oracle_version": "oracle:v1",
+      "time": 0.699
+    },
+    {
+      "iteration": 2,
+      "found": 1006,
+      "kernels": 40,
+      "predicted_coverage": "1005",
+      "rejected": 1,
+      "basin": 783,
+      "flaws": 359,
+      "oracle_version": "oracle:v2",
+      "time": 0.422
+    },
+    {
+      "iteration": 3,
+      "found": 875,
+      "kernels": 57,
+      "predicted_coverage": "874",
+      "rejected": 1,
+      "basin": 783,
+      "flaws": 295,
+      "oracle_version": "oracle:v3",
+      "time": 0.377
+    },
+    {
+      "iteration": 4,
+      "found": 1062,
+      "kernels": 55,
+      "predicted_coverage": "1054",
+      "rejected": 8,
+      "basin": 783,
+      "flaws": 227,
+      "oracle_version": "oracle:v4",
+      "time": 0.318
+    },
+    {
+      "iteration": 5,
+      "found": 1103,
+      "kernels": 66,
+      "predicted_coverage": "1100",
+      "rejected": 3,
+      "basin": 783,
+      "flaws": 169,
+      "oracle_version": "oracle:v5",
+      "time": 0.308
+    },
+    {
+      "iteration": 6,
+      "found": 915,
+      "kernels": 78,
+      "predicted_coverage": "914",
+      "rejected": 1,
+      "basin": 783,
+      "flaws": 108,
+      "oracle_version": "oracle:v6",
+      "time": 0.361
+    },
+    {
+      "iteration": 7,
+      "found": 761,
+      "kernels": 89,
+      "predicted_coverage": "756",
+      "rejected": 7,
+      "basin": 783,
+      "flaws": 58,
+      "oracle_version": "oracle:v7",
+      "time": 0.367
+    },
+    {
+      "iteration": 8,
+      "found": 578,
+      "kernels": 75,
+      "predicted_coverage": "576",
+      "rejected": 3,
+      "basin": 782,
+      "flaws": 33,
+      "oracle_version": "oracle:v8",
+      "time": 0.4
+    },
+    {
+      "iteration": 9,
+      "found": 435,
+      "kernels": 71,
+      "predicted_coverage": "430",
+      "rejected": 5,
+      "basin": 782,
+      "flaws": 18,
+      "oracle_version": "oracle:v9",
+      "time": 0.36
+    },
+    {
+      "iteration": 10,
+      "found": 336,
+      "kernels": 56,
+      "predicted_coverage": "330",
+      "rejected": 6,
+      "basin": 782,
+      "flaws": 7,
+      "oracle_version": "oracle:v10",
+      "time": 0.355
+    },
+    {
+      "iteration": 11,
+      "found": 224,
+      "kernels": 44,
+      "predicted_coverage": "222",
+      "rejected": 3,
+      "basin": 782,
+      "flaws": 3,
+      "oracle_version": "oracle:v11",
+      "time": 0.379
+    },
+    {
+      "iteration": 12,
+      "found": 165,
+      "kernels": 28,
+      "predicted_coverage": "163",
+      "rejected": 4,
+      "basin": 782,
+      "flaws": 1,
+      "oracle_version": "oracle:v12",
+      "time": 0.353
+    },
+    {
+      "iteration": 13,
+      "found": 98,
+      "kernels": 21,
+      "predicted_coverage": "94",
+      "rejected": 5,
+      "basin": 782,
+      "flaws": 0,
+      "oracle_version": "oracle:v13",
+      "time": 0.378
+    }
+  ],
+  "boundary": 0.34,
+  "total_time": 5.66
+}
