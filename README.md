@@ -1,4 +1,5 @@
-# Alignment Flywheel — Reference Implementation
+# The Alignment Flywheel: A Governance-Centric Hybrid MAS for Architecture-Agnostic Safety
+
 
 
 
