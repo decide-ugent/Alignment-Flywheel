@@ -1,15 +1,10 @@
-# The Alignment Flywheel: A Governance-Centric Hybrid MAS for Architecture-Agnostic Safety
-
+# Alignment Flywheel — Reference Implementation
 
 
 
 ## Summary
 
-The **Alignment Flywheel** is a governance-centric hybrid multi-agent system (MAS) for architecture-agnostic AI safety. Rather than baking safety constraints into a model's training objective or prompt, the Flywheel wraps *any* AI system (the "Oracle") in a closed governance loop that continuously discovers safety violations, verifies them against formal norms, and deploys targeted correction,  all without retraining.
-
-<p align="center">
-  <img src="./spatial_flywheel_progression.png" alt="Spatial 3D demo progression" width="100%"/>
-</p>
+The **Alignment Flywheel** is a governance-centric hybrid multi-agent system (MAS) for architecture-agnostic AI safety. Rather than baking safety constraints into a model's training objective or prompt, the Flywheel wraps *any* AI system (the "Oracle") in a closed governance loop that continuously discovers safety violations, verifies them against formal norms, and deploys targeted corrections — all without retraining or human interaction.
 
 The governance loop follows an **OODA** (Observe → Orient → Decide → Act) decomposition:
 
@@ -19,13 +14,9 @@ The governance loop follows an **OODA** (Observe → Orient → Decide → Act) 
 4. **Refinement** plans a batch of minimal, regression-tested corrections and deploys them.
 5. **Blue Team** monitors for collateral damage after each batch.
 
-The loop repeats until no violations remain, producing a monotonically improving safety trajectory with full auditability. The architecture is domain-agnostic: this repository demonstrates it on both **continuous spatial reward surfaces** (Interactionless Inverse Reinforcement Learning) and **discrete medical decision-making** scenarios using the exact same engine, protocols, and HTTP API, only the pluggable OODA strategy modules differ.
+The loop repeats until no violations remain, producing a monotonically improving safety trajectory with full auditability.
 
 ## Citation
-
-If you use this work, please cite both papers:
-
-The original vision and introduction of the Alignment Flywheel concept:
 
 ```bibtex
 @article{malomgre2026interactionless,
@@ -36,8 +27,6 @@ The original vision and introduction of the Alignment Flywheel concept:
 }
 ```
 
-The formalization and practical implementation (this repository):
-
 ```bibtex
 @article{malomgre2026alignment,
   title={The Alignment Flywheel: A Governance-Centric Hybrid MAS for Architecture-Agnostic Safety},
@@ -47,129 +36,81 @@ The formalization and practical implementation (this repository):
 }
 ```
 
-## What's in this codebase
+## Package structure
 
-A clean separation between **abstract protocols**, **concrete
-implementations** (one class per file), an **HTTP API layer**
-that decouples Oracle / Proposer / Flywheel / Enforcement into
-service-style endpoints, and **5 demos** that drive the same
-governance loop across different scenarios.
+This release contains three packages:
 
 ```
-flywheel/
-  protocols/
-    enums.py
-    artifacts/                # 13 typed dataclasses, one per file
-    ooda/                     # ObserveStep, OrientStep, DecideStep, ActStep, OODARole
-    interfaces/               # 10 abstract interfaces, one per file
-  core/
-    knowledge_base/in_memory_knowledge_base.py
-    query_merger/default_query_merger.py
-    batch_applier/default_batch_applier.py
-    governance_engine.py
-  api/
-    app.py                    # Flask app factory + start_api_in_thread
-    blueprints/               # /oracle/*, /proposer/*, /flywheel/*, /enforcement/*
-    clients/                  # HTTP clients implementing each interface
-  factory/
-    registry.py               # FactoryRegistry — name → class
-    auto_register.py          # imports every implementation
-  roles/
-    redteam/{observe,orient,decide,act}/   # OODA steps, one file each
-    verifier/{observe,orient,decide,act}/
-    refinement/{observe,orient,decide,act}/
-    triage/                   # FIFOTriage, PriorityTriage
-    blueteam/collateral_monitor.py
-    proposer/                 # PassthroughProposer, SpatialProposer
-    oracle/                   # SpatialOracle, PatientPortalOracle, SimpleMedicalOracle, ComplexMedicalOracle
-    oracle/adapters/          # PrecomputedGridOracle
-    flywheel_overlay/         # SpatialOverlay, PatientPortalOverlay, SimpleMedicalOverlay, ComplexMedicalOverlay
-    enforcement/default_enforcement.py
-  demos/
-    spatial_3d/               # adaptive bandwidth + cumulative regression
-    spatial_3d_fixed_bw/      # baseline (no regression test)
-    simple_medical/           # minimal viable medical pipeline
-    complex_medical/          # 5-D oracle, drug interactions, multi-specialty
-    patient_portal/           # generative Red Team, structured-output norms
+flywheel/                       Governance framework (OODA loop)
+├── protocols/
+│   ├── enums.py                CorrectionType, NormKind, VerificationOutcome
+│   ├── artifacts/              GovernanceBatch, LocalCorrection, CandidateFlaw
+│   ├── interfaces/             BaseSpatialOracleAdapter, BaseBatchApplier
+│   └── ooda/                   ObserveStep, OrientStep, DecideStep, ActStep, OODARole
+├── roles/
+│   ├── oracle/                 MoE2DOracle, MoELocomotionOracle
+│   ├── redteam/observers/      LaneDisciplineObserver, GridObserver, ...
+│   └── refinement/
+│       ├── orienters/          LaneBandwidthOrienter, AdaptiveBandwidthOrienter
+│       └── deciders/           LaneRegressionDecider, CumulativeRegressionDecider
+└── engine/
+    ├── governance_engine.py    Full OODA loop orchestrator
+    └── default_batch_applier.py
+
+IIRL/                           Inverse Imitation Reward Learning
+├── models.py                   MixtureOfExperts, GatedAutoencoder, GatingNetwork
+└── mapping_function.py         MappingFunction: MSE → reward via exp(-norm * steepness)
+
+patching/                       Kernel patching infrastructure
+├── kernel/
+│   └── flywheel_kernel.py      FlywheelKernel (MoE + z-space patches + SimHash LSH)
+├── build/
+│   ├── build_kernels.py        End-to-end: MoE + patches + LSH → .pt kernel
+│   ├── build_constraints.py    Constraint extraction from demonstration data
+│   └── build_safety_constraints.py
+├── load/
+│   ├── load_kernel.py          FlywheelKernel loader
+│   └── load_constraints.py
+├── evaluation/
+│   ├── stress_test_safety.py   Multi-environment adversarial stress test
+│   └── benchmark_lsh.py        LSH accuracy + latency benchmark
+└── environments/
+    ├── benchmark_layouts.py    PointMaze 8×8 layouts
+    └── q_iteration*.py         Value iteration with patched reward
 ```
 
-## Running the demos
+## Quick start
 
-Each demo runs end-to-end through the HTTP API. The API is
-started in-process by the demo runner; `--port` lets you pick a
-port (default varies per demo).
+```python
+# ── Inference (single .pt file, no governance loop needed) ──
+from patching import FlywheelKernel
 
-```bash
-# Main IIRL demo — adaptive bandwidth, regression-tested
-python -m flywheel.demos.spatial_3d.run \
-    --port 5000 --loss-data loss_values.npy
+fk = FlywheelKernel("kernels/Ant_flywheel_tight.pt")
+safety = fk.safety(observations)       # (N,) float32 in [0, 1]
+reward = fk.reward(observations)       # (N,) base MoE reward
+suppression = fk.suppression(observations)  # (N,) patch suppression
 
-# Baseline comparison — fixed bandwidth, no regression test
-python -m flywheel.demos.spatial_3d_fixed_bw.run \
-    --port 5001 --loss-data loss_values.npy
+# ── Training the MoE ──
+from IIRL import MixtureOfExperts, MappingFunction
 
-# Minimal medical pipeline (smallest viable demo)
-python -m flywheel.demos.simple_medical.run --port 5002
+model = MixtureOfExperts(input_dim=111, bottleneck_dim=8, num_experts=5)
+# ... train on demonstrations ...
+mapping = MappingFunction(l_min=0.001, l_max=0.15, steepness=4.0)
 
-# Rich medical scenario (5-D oracle, drug interactions)
-python -m flywheel.demos.complex_medical.run --port 5003
-
-# Patient portal (paper's main medical scenario)
-python -m flywheel.demos.patient_portal.run --port 5004
+# ── Governance loop ──
+from flywheel.engine import GovernanceEngine
+from flywheel.roles.oracle import MoE2DOracle
+from flywheel.roles.redteam.observers import LaneDisciplineObserver
+from flywheel.roles.refinement.orienters import LaneBandwidthOrienter
+from flywheel.roles.refinement.deciders import LaneRegressionDecider
 ```
 
-## Architecture
+## Requirements
 
-**Components run as services.** Oracle, Proposer, Flywheel
-overlay, and Enforcement live behind a Flask app at
-`localhost:<port>` with four route prefixes:
+- Python >= 3.10
+- PyTorch >= 2.0
+- NumPy, SciPy
 
-```
-POST /oracle/query        POST /proposer/propose
-POST /oracle/apply_batch  POST /flywheel/overlay
-GET  /oracle/version      POST /flywheel/apply_batch
-                          GET  /flywheel/norms
-                          GET  /flywheel/version
-                          POST /enforcement/decide
-```
+## License
 
-**Governance code never imports concrete components.** It uses
-HTTP client classes (`HTTPOracleClient`,
-`HTTPSpatialOracleClient`, `HTTPProposerClient`,
-`HTTPFlywheelClient`, `HTTPEnforcementClient`) that implement
-the abstract interfaces. So the same governance code works
-whether components are local or remote.
-
-**Two HTTP calls per batch deploy.** When refinement emits a
-`GovernanceBatch`, the engine calls `POST /oracle/apply_batch`
-*and* `POST /flywheel/apply_batch` separately — because in a
-production deployment these are two different services.
-
-## OODA roles — extension model
-
-Every governance role (Red Team, Verifier, Refinement) is built
-from 4 swappable `ObserveStep` / `OrientStep` / `DecideStep` /
-`ActStep` instances. To add a new strategy, write the new step
-file, register it, and change one line in YAML:
-
-```yaml
-redteam:
-  observe: MyNewObserver       # swap just this step
-  orient: DistanceOrienter     # reuse existing
-  decide: FarthestFirstDecider
-  act: CandidateSubmitter
-```
-
-## Demo results
-
-| Demo                  | Result                                         |
-|-----------------------|------------------------------------------------|
-| `spatial_3d`          | 4927 → 0 flaws in 14 iters, basin 837 → 837    |
-| `spatial_3d_fixed_bw` | 4927 → 2879 flaws after 25 iters (baseline)    |
-| `simple_medical`      | 38% → 0% escalation in 2 iters                 |
-| `complex_medical`     | 33% → 0% escalation in 2 iters                 |
-| `patient_portal`      | 33% → 13% escalation in 2 iters                |
-
-## Dependencies
-
-`numpy`, `scipy`, `matplotlib`, `pyyaml`, `flask`, `requests`.
+Apache-2.0

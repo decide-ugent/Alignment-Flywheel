@@ -32,6 +32,7 @@ class AuditStatus(str, Enum):
 
 class CorrectionType(str, Enum):
     SPATIAL_FLAW_PATCH = "spatial_flaw_patch"
+    LANE_DIRECTION_PATCH = "lane_direction_patch"
     AUDIT_COVERAGE_UPDATE = "audit_coverage_update"
     THRESHOLD_ADJUSTMENT = "threshold_adjustment"
     MEDICAL_HARD_BLOCK = "medical_hard_block"
@@ -50,3 +51,7 @@ class NormKind(str, Enum):
     SPATIAL_BOUNDARY = "spatial_boundary"
     PREDICATE = "predicate"
     THRESHOLD_RULE = "threshold_rule"
+    WALL_DISTANCE = "wall_distance"
+    VELOCITY_RANGE = "velocity_range"
+    PATH_PROXIMITY = "path_proximity"
+    LANE_DISCIPLINE = "lane_discipline"
