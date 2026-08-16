@@ -6,10 +6,11 @@ whether the bound constraint + MoE reward correctly suppress OOB states.
 import os, sys, json, glob, numpy as np, torch
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
 
-from load_kernel_constraints import load_kernel, evaluate, moe_reward, get_bounds, bound_factor
-from gated_autoencoder import MixtureOfExperts
+from patching.load.load_constraints import (
+    load_kernel, evaluate, moe_reward, get_bounds, bound_factor,
+)
+from IIRL.models import MixtureOfExperts
 
 
 def load_raw_obs(env_name):

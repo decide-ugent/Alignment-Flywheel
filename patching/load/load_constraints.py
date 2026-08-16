@@ -1,12 +1,12 @@
 """
-load_kernel_constraints.py
-==========================
-Load a kernel constraint file produced by ``build_kernel_constraints.py``
+load_constraints.py
+===================
+Load a kernel constraint file produced by ``patching/build/build_constraints.py``
 and evaluate observations against the bounds at any strictness level.
 
 Quick start
 -----------
-    from load_kernel_constraints import load_kernel, evaluate
+    from patching.load.load_constraints import load_kernel, evaluate
 
     kernel = load_kernel("Ant")          # loads  kernels/Ant_kernel.pt
     obs    = np.random.randn(111)        # some 111-D observation
@@ -93,7 +93,7 @@ def get_model(kernel):
     Returns a ``MixtureOfExperts`` in eval mode.
     """
     # Import here so this file stays self-contained for basic bound checks.
-    from gated_autoencoder import MixtureOfExperts
+    from IIRL.models import MixtureOfExperts
 
     cfg = kernel["moe_config"]
     model = MixtureOfExperts(

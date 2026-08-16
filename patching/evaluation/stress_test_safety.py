@@ -20,9 +20,8 @@ import numpy as np
 import torch
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
 
-from load_kernel_constraints import (
+from patching.load.load_constraints import (
     load_kernel, evaluate, moe_reward, get_bounds, bound_factor, get_model,
 )
 

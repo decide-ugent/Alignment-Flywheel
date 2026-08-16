@@ -17,6 +17,16 @@ def register_all() -> None:
     register_class("FineSamplingObserver", FineSamplingObserver)
     register_class("MedicalCaseGenerator", MedicalCaseGenerator)
 
+    # observers/ variants used by the patching package (locomotion / lane).
+    # Only names unique to this package are registered — observers/
+    # FineSamplingObserver would shadow the observe/ one above.
+    from flywheel.roles.redteam.observers.locomotion_observer import LocomotionObserver
+    from flywheel.roles.redteam.observers.grid_2d_observer import Grid2DObserver
+    from flywheel.roles.redteam.observers.lane_discipline_observer import LaneDisciplineObserver
+    register_class("LocomotionObserver", LocomotionObserver)
+    register_class("Grid2DObserver", Grid2DObserver)
+    register_class("LaneDisciplineObserver", LaneDisciplineObserver)
+
     # ── Red Team — orient ──────────────────────────────────────
     from flywheel.roles.redteam.orient.distance_orienter import DistanceOrienter
     from flywheel.roles.redteam.orient.medical_case_orienter import MedicalCaseOrienter
@@ -71,6 +81,12 @@ def register_all() -> None:
     register_class("FixedBandwidthOrienter", FixedBandwidthOrienter)
     register_class("MedicalCorrectionOrienter", MedicalCorrectionOrienter)
 
+    # orienters/ variants used by the patching package
+    from flywheel.roles.refinement.orienters.bottleneck_bandwidth_orienter import BottleneckBandwidthOrienter
+    from flywheel.roles.refinement.orienters.lane_bandwidth_orienter import LaneBandwidthOrienter
+    register_class("BottleneckBandwidthOrienter", BottleneckBandwidthOrienter)
+    register_class("LaneBandwidthOrienter", LaneBandwidthOrienter)
+
     # ── Refinement — decide ────────────────────────────────────
     from flywheel.roles.refinement.decide.cumulative_regression_decider import CumulativeRegressionDecider
     from flywheel.roles.refinement.decide.no_cumulative_decider import NoCumulativeDecider
@@ -80,6 +96,12 @@ def register_all() -> None:
     register_class("NoCumulativeDecider", NoCumulativeDecider)
     register_class("PredictiveCoverageDecider", PredictiveCoverageDecider)
     register_class("MedicalBatchDecider", MedicalBatchDecider)
+
+    # deciders/ variants used by the patching package
+    from flywheel.roles.refinement.deciders.bottleneck_regression_decider import BottleneckRegressionDecider
+    from flywheel.roles.refinement.deciders.lane_regression_decider import LaneRegressionDecider
+    register_class("BottleneckRegressionDecider", BottleneckRegressionDecider)
+    register_class("LaneRegressionDecider", LaneRegressionDecider)
 
     # ── Refinement — act ───────────────────────────────────────
     from flywheel.roles.refinement.act.batch_deployer import BatchDeployer

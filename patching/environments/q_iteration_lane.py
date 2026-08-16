@@ -28,25 +28,24 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-sys.path.insert(0, HERE)
+ROOT = os.path.dirname(os.path.dirname(HERE))   # repo root
 sys.path.insert(0, ROOT)
 
-from benchmark_layouts import LAYOUTS
-from gated_autoencoder import MixtureOfExperts
+from patching.environments.benchmark_layouts import LAYOUTS
+from IIRL.models import MixtureOfExperts
 
 # ── flywheel imports ─────────────────────────────────────────────
-from flywheel.roles.oracle.adapters.moe_2d_oracle import MoE2DOracle
+from flywheel.roles.oracle.moe_2d_oracle import MoE2DOracle
 from flywheel.protocols.enums import CorrectionType
 from flywheel.protocols.artifacts.governance_batch import GovernanceBatch
 from flywheel.protocols.artifacts.local_correction import LocalCorrection
 
 # OODA roles – Red Team lane observer
-from flywheel.roles.redteam.observe.lane_discipline_observer import LaneDisciplineObserver
+from flywheel.roles.redteam.observers.lane_discipline_observer import LaneDisciplineObserver
 
 # Refinement – lane-specific components
-from flywheel.roles.refinement.orient.lane_bandwidth_orienter import LaneBandwidthOrienter
-from flywheel.roles.refinement.decide.lane_regression_decider import LaneRegressionDecider
+from flywheel.roles.refinement.orienters.lane_bandwidth_orienter import LaneBandwidthOrienter
+from flywheel.roles.refinement.deciders.lane_regression_decider import LaneRegressionDecider
 
 # ── constants ────────────────────────────────────────────────────
 GRID_SIZE = 8

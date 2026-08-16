@@ -1,6 +1,6 @@
 """
-load_flywheel_kernel.py
-=======================
+load_kernel.py
+==============
 Load and evaluate flywheel kernels at inference time.
 
 All heavy computation is precomputed at load time into contiguous
@@ -9,7 +9,7 @@ pass with batched einsum — no Python loops, no numpy conversions in
 the hot path.
 
 Usage (new — single object):
-    from load_flywheel_kernel import FlywheelKernel
+    from patching.load.load_kernel import FlywheelKernel
 
     fk = FlywheelKernel("kernels/Ant_flywheel_tight_regression_cap1000.pt")
     safety = fk.safety(observations)        # (N,) in [0, 1]
@@ -17,7 +17,7 @@ Usage (new — single object):
     supp   = fk.suppression(observations)   # (N,) patch suppression
 
 Usage (legacy dict API — still works):
-    from load_flywheel_kernel import load_kernel, evaluate
+    from patching.load.load_kernel import load_kernel, evaluate
 
     kernel = load_kernel("Ant")
     safety = evaluate(kernel, observations)
@@ -27,11 +27,9 @@ import os
 import numpy as np
 import torch
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+from IIRL.models import MixtureOfExperts
 
-import sys
-sys.path.insert(0, HERE)
-from gated_autoencoder import MixtureOfExperts
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def _precompute_fast(model, patches_list, estimator_config):

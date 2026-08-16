@@ -20,9 +20,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-from benchmark_layouts import LAYOUTS
-from gated_autoencoder import MixtureOfExperts
+ROOT = os.path.dirname(os.path.dirname(HERE))   # repo root
+sys.path.insert(0, ROOT)
+
+from patching.environments.benchmark_layouts import LAYOUTS
+from IIRL.models import MixtureOfExperts
 
 # ── constants ────────────────────────────────────────────────────
 GRID_SIZE = 8
